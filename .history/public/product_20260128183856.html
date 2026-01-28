@@ -1,0 +1,75 @@
+<h2>Product Master</h2>
+
+<input id="pname" placeholder="Product Name">
+
+<select id="cat"></select>
+
+<button onclick="add()">Add</button>
+
+<table border="1">
+<thead>
+<tr>
+<th>ID</th><th>Name</th><th>CatId</th><th>CatName</th><th>X</th>
+</tr>
+</thead>
+<tbody id="data"></tbody>
+</table>
+
+<button onclick="prev()">Prev</button>
+<button onclick="next()">Next</button>
+
+<script>
+
+let page=1;
+
+function loadCat(){
+ fetch("/category")
+ .then(r=>r.json())
+ .then(d=>{
+  d.forEach(c=>{
+   cat.innerHTML+=`<option value="${c.CategoryId}">
+   ${c.CategoryName}</option>`
+  })
+ })
+}
+
+function loadProd(){
+ fetch("/product?page="+page)
+ .then(r=>r.json())
+ .then(d=>{
+  data.innerHTML=""
+  d.forEach(p=>{
+   data.innerHTML+=`
+   <tr>
+   <td>${p.ProductId}</td>
+   <td>${p.ProductName}</td>
+   <td>${p.CategoryId}</td>
+   <td>${p.CategoryName}</td>
+   <td><button onclick="del(${p.ProductId})">X</button></td>
+   </tr>`
+  })
+ })
+}
+
+function add(){
+ fetch("/product",{
+  method:"POST",
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({
+    ProductName:pname.value,
+    CategoryId:cat.value
+  })
+ }).then(loadProd)
+}
+
+function del(id){
+ fetch("/product/"+id,{method:"DELETE"}).then(loadProd)
+}
+
+function next(){ page++; loadProd(); }
+function prev(){ if(page>1){page--; loadProd();}}
+
+loadCat()
+loadProd()
+
+</script>
