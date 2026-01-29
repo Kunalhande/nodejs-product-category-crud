@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.get("/", (req,res)=>{
-  res.send("Welcome to the my web");
+  res.send("Welcome to the Node Server");
 });
 
 

@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.get("/", (req,res)=>{
-  res.send("Welcome to the my web");
+  res.send("Welcome to the Node Server");
 });
 
 
@@ -32,6 +32,7 @@ app.delete("/category/:id",(req,res)=>{
 });
 
 
+// 👉 PRODUCT CRUD + PAGINATION
 
 app.post("/product",(req,res)=>{
   db.query("INSERT INTO Product SET ?", req.body, ()=>res.send("Added"));
